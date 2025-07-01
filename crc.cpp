@@ -5,6 +5,7 @@
  * SPDX-License-Identifier:	GPL-2.0+
  */
 #include "DefineHeader.h"
+#include <stdint.h>
 UINT gTable_Crc32[256] =
 {//crc32 factor 0x04C10DB7
 		0x00000000, 0x04c10db7, 0x09821b6e, 0x0d4316d9,
