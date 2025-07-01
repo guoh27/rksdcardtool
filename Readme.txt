@@ -1,25 +1,28 @@
-rkdeveloptool gives you a simple way to read/write rockusb device.let's start.
+sdcard_tool
+===========
 
-compile and install
-1. install libusb and libudev
-	sudo apt-get install libudev-dev libusb-1.0-0-dev dh-autoreconf
-2. go into root of rkdeveloptool
-3. ./autogen.sh
-4. ./configure
-5. make
+`sdcard_tool` is a minimal utility used to generate the ID block (IDB)
+from a Rockchip loader image. The resulting `idb.bin` can be written to
+an SD card or other storage for boot purposes.
 
-rkdeveloptool usage,input "rkdeveloptool -h" to see
+Build
+-----
 
-example:
-1.download kernel.img
-sudo ./rkdeveloptool db RKXXLoader.bin    //download usbplug to device
-sudo ./rkdeveloptool wl 0x8000 kernel.img //0x8000 is base of kernel partition,unit is sector.
-sudo ./rkdeveloptool rd                   //reset device
+1. Install a C++11 capable compiler and CMake.
+2. From the project root run:
 
-compile error help
-if you encounter the error like below:
-./configure: line 4269: syntax error near unexpected token `LIBUSB1,libusb-1.0'
-./configure: line 4269: `PKG_CHECK_MODULES(LIBUSB1,libusb-1.0)'
+```bash
+cmake .
+make
+```
 
-You should install pkg-config libusb-1.0:
-	sudo apt-get install pkg-config libusb-1.0
+Usage
+-----
+
+```
+./sdcard_tool <loader.bin> <output_idb.bin>
+```
+
+The first argument is the Rockchip loader binary.  The second argument is
+the filename for the generated IDB.
+
