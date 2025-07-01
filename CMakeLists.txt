@@ -1,9 +1,9 @@
-cmake_minimum_required(VERSION 2.6)
-project(sdcard_tool)
+cmake_minimum_required(VERSION 3.10)
+project(rksdcardtool)
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(sdcard_tool
-    sdcard_tool.cpp
+add_executable(rksdcardtool
+    RKSdcardTool.cpp
     RKBoot.cpp
     RKImage.cpp
     crc.cpp
