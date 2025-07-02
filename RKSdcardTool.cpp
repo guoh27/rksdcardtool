@@ -188,17 +188,23 @@ int main(int argc, char *argv[])
         }
     }
 
-    FILE *out = fopen(argv[2], "wb");
-    if (!out) {
-        perror("fopen");
-        delete[] idb;
-        delete[] loaderCodeBuffer;
-        delete[] loaderDataBuffer;
-        if (loaderHeadBuffer) delete[] loaderHeadBuffer;
-        return 1;
+    FILE *out;
+    if (strcmp(argv[2], "-") == 0) {
+        out = stdout;
+    } else {
+        out = fopen(argv[2], "wb");
+        if (!out) {
+            perror("fopen");
+            delete[] idb;
+            delete[] loaderCodeBuffer;
+            delete[] loaderDataBuffer;
+            if (loaderHeadBuffer) delete[] loaderHeadBuffer;
+            return 1;
+        }
     }
     fwrite(idb, 1, dwSectorNum * SECTOR_SIZE, out);
-    fclose(out);
+    if (out != stdout)
+        fclose(out);
 
     delete[] idb;
     delete[] loaderCodeBuffer;
