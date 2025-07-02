@@ -24,5 +24,6 @@ Usage
 ```
 
 The first argument is the Rockchip loader binary.  The second argument is
-the filename for the generated IDB.
+the filename for the generated IDB. Use `-` instead of a filename to write
+the IDB to standard output.
 
