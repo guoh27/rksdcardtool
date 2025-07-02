@@ -1,6 +1,7 @@
 #include "RKImage.h"
 #include "RKBoot.h"
 #include "DefineHeader.h"
+#include "version.h"
 extern UINT CRC_32(unsigned char* pData, UINT size);
 extern unsigned short CRC_16(unsigned char* pData, UINT size);
 extern void P_RC4(unsigned char* buf, unsigned short len);
@@ -97,6 +98,10 @@ static int MakeIDBlockData(PBYTE pDDR, PBYTE pLoader, PBYTE lpIDBlock, USHORT us
 
 int main(int argc, char *argv[])
 {
+    if (argc == 2 && (!strcmp(argv[1], "-v") || !strcmp(argv[1], "--version"))) {
+        printf("rksdcardtool version %s\n", RKSDCARDTOOL_VERSION);
+        return 0;
+    }
     if (argc != 3) {
         printf("Usage: %s <loader.bin> <output_idb.bin>\n", argv[0]);
         return 1;
