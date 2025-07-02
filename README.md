@@ -16,7 +16,7 @@ cmake -Bbuild -S.
 cmake --build build
 ```
 
-3. Optionally run `make install` to install the `rksdcardtool` binary.
+3. Optionally run `cmake --install build` to install the `rksdcardtool` binary.
 
 Usage
 -----
