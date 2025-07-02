@@ -16,6 +16,8 @@ cmake .
 make
 ```
 
+3. Optionally run `make install` to install the `rksdcardtool` binary.
+
 Usage
 -----
 
@@ -25,5 +27,6 @@ Usage
 
 The first argument is the Rockchip loader binary.  The second argument is
 the filename for the generated IDB. Use `-` instead of a filename to write
-the IDB to standard output.
+the IDB to standard output. Use `-v` or `--version` to print the tool
+version.
 
