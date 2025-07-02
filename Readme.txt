@@ -1,7 +1,7 @@
-sdcard_tool
+rksdcardtool
 ===========
 
-`sdcard_tool` is a minimal utility used to generate the ID block (IDB)
+`rksdcardtool` is a minimal utility used to generate the ID block (IDB)
 from a Rockchip loader image. The resulting `idb.bin` can be written to
 an SD card or other storage for boot purposes.
 
@@ -20,7 +20,7 @@ Usage
 -----
 
 ```
-./sdcard_tool <loader.bin> <output_idb.bin>
+./rksdcardtool <loader.bin> <output_idb.bin>
 ```
 
 The first argument is the Rockchip loader binary.  The second argument is
