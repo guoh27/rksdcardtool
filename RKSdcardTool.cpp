@@ -2,9 +2,31 @@
 #include "RKBoot.h"
 #include "DefineHeader.h"
 #include "version.h"
+#include <cstdint>
 extern UINT CRC_32(unsigned char* pData, UINT size);
 extern unsigned short CRC_16(unsigned char* pData, UINT size);
+extern unsigned int crc32_le(unsigned int crc, unsigned char *p, unsigned int len);
 extern void P_RC4(unsigned char* buf, unsigned short len);
+
+static uint16_t crc16_ccitt(const uint8_t *data, size_t len)
+{
+    uint16_t crc = 0xFFFF;
+    for (size_t i = 0; i < len; ++i) {
+        crc ^= (uint16_t)data[i] << 8;
+        for (int b = 0; b < 8; ++b) {
+            if (crc & 0x8000)
+                crc = (crc << 1) ^ 0x1021;
+            else
+                crc <<= 1;
+        }
+    }
+    return crc;
+}
+
+static uint32_t crc32_ieee(const uint8_t *data, size_t len)
+{
+    return crc32_le(0, (unsigned char *)data, (unsigned int)len);
+}
 
 
 #define SECTOR_SIZE 512
@@ -191,6 +213,30 @@ int main(int argc, char *argv[])
             if (loaderHeadBuffer) delete[] loaderHeadBuffer;
             return 1;
         }
+    }
+
+    /* Update RKNS header CRCs and pad to 512K if needed */
+    if (dwSectorNum * SECTOR_SIZE >= 0x200 &&
+        idb[0] == 'R' && idb[1] == 'K' && idb[2] == 'N' && idb[3] == 'S') {
+        if (dwSectorNum < 1024) {
+            PBYTE padded = new BYTE[1024 * SECTOR_SIZE];
+            memset(padded, 0, 1024 * SECTOR_SIZE);
+            memcpy(padded, idb, dwSectorNum * SECTOR_SIZE);
+            delete[] idb;
+            idb = padded;
+            dwSectorNum = 1024;
+        }
+
+        const size_t header_size = 0x200;
+        uint32_t data_crc = crc32_ieee(idb + header_size,
+                                       dwSectorNum * SECTOR_SIZE - header_size);
+        memcpy(idb + 0x1f8, &data_crc, 4);
+        uint8_t hdr[header_size];
+        memcpy(hdr, idb, header_size);
+        hdr[0x1fe] = 0;
+        hdr[0x1ff] = 0;
+        uint16_t hdr_crc = crc16_ccitt(hdr, header_size);
+        memcpy(idb + 0x1fe, &hdr_crc, 2);
     }
 
     FILE *out;
